@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using BookshelfApi.Models;
 using BookshelfApi.Enums;
+using BookshelfApi.Dtos;
+using BookshelfApi.Mappers;
 
 
 namespace BookshelfApi.Controllers
@@ -25,7 +27,7 @@ namespace BookshelfApi.Controllers
         [HttpGet("{id}")]
         public ActionResult<Book> Get(Guid id)
         {
-            var book = books.FirstOrDefault(book => book.Id == id);
+            var book = books.FirstOrDefault(b => b.Id == id);
             if (book != null)
             {
                 return book;
@@ -35,10 +37,11 @@ namespace BookshelfApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Book> Post([FromBody] Book book)
+        public ActionResult<Book> Post([FromBody] BookDto bookDto)
         {
-            if (book != null)
+            if (bookDto != null)
             {
+                Book book = BookMapper.FromDto(bookDto);
                 books.Add(book);
                 return CreatedAtAction(nameof(Get), new { id = book.Id }, book);
             }
@@ -68,7 +71,7 @@ namespace BookshelfApi.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(Guid id)
         {
-            var book = books.FirstOrDefault(book => book.Id == id);
+            var book = books.FirstOrDefault(b => b.Id == id);
             if (book != null)
             {
                 books.Remove(book);
