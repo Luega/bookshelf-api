@@ -1,4 +1,15 @@
+var  MyCORSPolicy = "_myCORSPolicy";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyCORSPolicy,
+                      policy  =>
+                      {
+                          policy.WithOrigins("http://localhost:4200");
+                      });
+});
 
 // Add services to the container.
 
@@ -17,6 +28,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyCORSPolicy);
 
 app.UseAuthorization();
 
