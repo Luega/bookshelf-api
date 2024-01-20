@@ -19,38 +19,38 @@ namespace BookshelfApi.Controllers
         };
 
         [HttpGet]
-        public ActionResult<IEnumerable<Book>> Get()
+        public ActionResult<IEnumerable<Book>> GetBooks()
         {
             return books;
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Book> Get(Guid id)
+        public ActionResult<Book> GetBook(Guid id)
         {
             var book = books.FirstOrDefault(b => b.Id == id);
             if (book != null)
             {
-                return book;
+                return Ok(book);
             }
             
             return NotFound();
         }
 
         [HttpPost]
-        public ActionResult<Book> Post([FromBody] BookDto bookDto)
+        public IActionResult Post([FromBody] BookDto bookDto)
         {
             if (bookDto != null)
             {
                 Book book = BookMapper.FromDto(bookDto);
                 books.Add(book);
-                return CreatedAtAction(nameof(Get), new { id = book.Id }, book);
+                return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
             }
             
             return BadRequest();
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(Guid id, [FromBody] Book book)
+        public IActionResult Put(Guid id, [FromBody] Book book)
         {
             var existingBook = books.FirstOrDefault(b => b.Id == id);
             if (existingBook != null)
@@ -69,7 +69,7 @@ namespace BookshelfApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(Guid id)
+        public IActionResult Delete(Guid id)
         {
             var book = books.FirstOrDefault(b => b.Id == id);
             if (book != null)
