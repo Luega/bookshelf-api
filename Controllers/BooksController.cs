@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using BookshelfApi.Models;
 using BookshelfApi.Enums;
 using BookshelfApi.Dtos;
@@ -7,6 +8,7 @@ using BookshelfApi.Mappers;
 
 namespace BookshelfApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BooksController : ControllerBase
