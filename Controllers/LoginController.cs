@@ -36,7 +36,17 @@ namespace BookshelfApi.Controllers
                     );
                     var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-                    return Ok(token);
+                    var cookieOptions = new CookieOptions
+                    {
+                        HttpOnly = true, 
+                        Expires = DateTime.UtcNow.AddMinutes(5),
+                        Secure = true,
+                        SameSite = SameSiteMode.None 
+                    };
+
+                    Response.Cookies.Append("jwt", token, cookieOptions);
+
+                    return Ok();
                 }
 
                 return Unauthorized();
