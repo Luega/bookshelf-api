@@ -39,7 +39,7 @@ namespace BookshelfApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] BookDto bookDto)
+        public IActionResult PostBook([FromBody] BookDto bookDto)
         {
             if (bookDto != null)
             {
@@ -52,7 +52,7 @@ namespace BookshelfApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] Book book)
+        public IActionResult EditBook(Guid id, [FromBody] Book book)
         {
             var existingBook = books.FirstOrDefault(b => b.Id == id);
             if (existingBook != null)
@@ -71,7 +71,7 @@ namespace BookshelfApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public IActionResult DeleteBook(Guid id)
         {
             var book = books.FirstOrDefault(b => b.Id == id);
             if (book != null)
