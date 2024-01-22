@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using BookshelfApi.Models;
 using System.Text;
 
@@ -26,17 +25,18 @@ namespace BookshelfApi.Controllers
                 
                 if (existingLoginCredentials != null)
                 {
+                    DateTime expDate = DateTime.Now.AddMinutes(5);
                     var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("My@Secret@Key@5000"));
                     var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                     var tokenOptions = new JwtSecurityToken(
                         issuer: "https://localhost:5001",
                         audience: "https://localhost:5001",
-                        expires: DateTime.Now.AddMinutes(5),
+                        expires: expDate,
                         signingCredentials: signinCredentials
                     );
                     var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-                    return Ok(token);
+                    return Ok(new AuthToken() { Token = token, ExpDate = expDate});
                 }
 
                 return Unauthorized();
