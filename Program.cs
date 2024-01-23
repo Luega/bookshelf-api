@@ -1,3 +1,5 @@
+using BookshelfApi.Interfaces;
+using BookshelfApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -36,6 +38,9 @@ builder.Services.AddAuthentication(opt => {
     });
 
 // Add services to the container.
+builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IQuoteService, QuoteService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
