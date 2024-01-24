@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyCORSPolicy,
                       policy  =>
                       {
-                          policy.WithOrigins("http://localhost:4200")
+                          policy.WithOrigins(builder.Configuration["PolicyOrigin"])
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
                       });
@@ -32,7 +32,7 @@ builder.Services.AddAuthentication(opt => {
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["TokenIssuer"],
-            ValidAudience = "https://localhost:5001",
+            ValidAudience = builder.Configuration["TokenAudience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretTokenKey"]))
         };
     });

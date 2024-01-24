@@ -40,7 +40,7 @@ namespace BookshelfApi.Services
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             var tokenOptions = new JwtSecurityToken(
                 issuer: _config["TokenIssuer"],
-                audience: "https://localhost:5001",
+                audience: _config["TokenAudience"],
                 expires: expDate,
                 signingCredentials: signinCredentials
             );
