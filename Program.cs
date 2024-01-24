@@ -31,9 +31,9 @@ builder.Services.AddAuthentication(opt => {
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "https://localhost:5001",
+            ValidIssuer = builder.Configuration["TokenIssuer"],
             ValidAudience = "https://localhost:5001",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("My@Secret@Key@5000"))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretTokenKey"]))
         };
     });
 

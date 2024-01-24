@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using BookshelfApi.Interfaces;
 using BookshelfApi.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +8,13 @@ namespace BookshelfApi.Services
 {
     public class LoginService : ILoginService
     {
+        private readonly IConfiguration _config;
+
+        public LoginService(IConfiguration config) 
+        {
+            _config = config;
+        }
+
         private static readonly List<LoginCredentials> loginCredentialsList = new()
         {
             new() { Username = "admin", Password = "admin"},
@@ -33,10 +36,10 @@ namespace BookshelfApi.Services
         public AuthToken CreateToken()
         {
             DateTime expDate = DateTime.Now.AddMinutes(5);
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("My@Secret@Key@5000"));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["SecretTokenKey"]));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             var tokenOptions = new JwtSecurityToken(
-                issuer: "https://localhost:5001",
+                issuer: _config["TokenIssuer"],
                 audience: "https://localhost:5001",
                 expires: expDate,
                 signingCredentials: signinCredentials
