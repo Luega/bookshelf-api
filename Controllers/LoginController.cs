@@ -1,8 +1,5 @@
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using BookshelfApi.Models;
-using System.Text;
 using BookshelfApi.Interfaces;
 
 namespace BookshelfApi.Controllers
@@ -12,16 +9,21 @@ namespace BookshelfApi.Controllers
     public class LoginController : ControllerBase
     {
         private readonly ILoginService _loginService;
+        private readonly ILogger<LoginController> _logger;
 
-        public LoginController(ILoginService loginService)
+        public LoginController(ILoginService loginService, ILogger<LoginController> logger)
         {
             _loginService = loginService;
+            _logger = logger;
         }
 
         [HttpPost]
         public IActionResult Login([FromBody] LoginCredentials loginCredentials) 
         {
-            if (loginCredentials != null)
+            if (loginCredentials == null)
+                return Unauthorized();
+
+            try
             {
                 if (_loginService.IsAuthenticate(loginCredentials))
                 {
@@ -30,8 +32,11 @@ namespace BookshelfApi.Controllers
 
                 return Unauthorized();
             }
-
-            return Unauthorized();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in Login.");
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }    
         }
     }
 }

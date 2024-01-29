@@ -28,7 +28,7 @@ namespace BookshelfApi.Services
         public Book PostBook(BookDto bookDto)
         {
             Book book = BookMapper.FromDto(bookDto);
-            books.Add(book);
+            books.Insert(0, book);
 
             return book;
         }
